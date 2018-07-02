@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Index yeboy</title>
+{% endblock %}
+{% block content %}
+    <div>
+        <h1>List articles</h1>
+    </div>
+    <div>
+        {% for article in articles %}
+            <h3>{{ article }}</h3>
+        {% endfor %}
+    </div>
+    <div>
+        <ul class="pagination justify-content-center" style="margin:20px 0">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            <li class="page-item">...</li>
+        </ul>
+    </div>
+{% endblock %}
