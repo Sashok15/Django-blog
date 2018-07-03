@@ -9,6 +9,10 @@ def index(request):
     return render(request, 'blog/index.html', context=context)
 
 
+def ArticleDetail(request, pk):
+    pass
+
+
 class ArticleList():
     pass
 
@@ -16,7 +20,8 @@ class ArticleList():
 def create_article(request):
     if request.method == "GET":
         pass
-
+    elif request.method == "POST":
+        pass
 
 def update_article(request):
     pass

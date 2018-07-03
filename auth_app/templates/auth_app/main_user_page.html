@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    MAIN user page {{ user.username }} <br>
+    {% for foo in orders %}
+        {{ foo.name_user }}
+        {{ foo.order_date }}
+        {{ foo.total_price }} <br>
+{#        {{ foo.product_ids }} <br>#}
+    {% endfor %}
+
+{% endblock %}
