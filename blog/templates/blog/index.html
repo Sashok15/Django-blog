@@ -5,20 +5,38 @@
 {% block content %}
     <div>
         <h1>List articles</h1>
+        <a href="{% url 'create_article' %}">CreateArticle</a>
     </div>
     <div>
         {% for article in articles %}
-            <h3>{{ article }}</h3>
+            <li><a href={% url 'detail' article.id %}>{{ article.text }} {{ article.pub_date }}</a></li>
         {% endfor %}
     </div>
+
     <div>
         <ul class="pagination justify-content-center" style="margin:20px 0">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            <li class="page-item">...</li>
+            {#    <div class="pagination" style="text-align: center">#}
+            {#    <span class="step-links">#}
+            <li class="page-item">
+                {% if articles.has_previous %}
+                    {#                    <a class="page-link" href="?page=1">&laquo; first</a>#}
+                    <a class="page-link" href="?page={{ articles.previous_page_number }}">previous</a>
+                {% endif %}
+            </li>
+
+            <li class="page-item"><a class="page-link">
+                <span class="current">{{ articles }}
+{#                    {{ articles.paginator.num_pages }}.#}
+                </span>
+            </a>
+            </li>
+
+            <li class="page-item">
+                {% if articles.has_next %}
+                    <a class="page-link" href="?page={{ articles.next_page_number }}">next</a>
+                    {#                    <a class="page-link" href="?page={{ articles.paginator.num_pages }}">last &raquo;</a>#}
+                {% endif %}
+            </li>
         </ul>
     </div>
 {% endblock %}

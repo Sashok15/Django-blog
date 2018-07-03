@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <ul>
+            <li>{{ article_detail.id }}</li>
+            <li>{{ article_detail.title }}</li>
+            <li>{{ article_detail.text }}</li>
+        </ul>
+    </div>
+    <div>
+        <hr>
+        <p>This is already comments </p>
+        <ul>
+            {% for comment in comments %}
+                <ol>
+                {{ comment.author.username }}
+                {{ comment.text }}
+                </ol>
+            {% endfor %}
+
+        </ul>
+    </div>
+{% endblock %}
