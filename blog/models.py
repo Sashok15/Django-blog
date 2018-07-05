@@ -10,14 +10,14 @@ class Article(models.Model):
     pub_date = models.DateTimeField('date published', default=timezone.now())
 
     def __str__(self):
-        return self.id, self.title, self.text, self.author_id
+        return self.title
 
 
 class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
-    pub_date = models.DateTimeField('date published',  default=timezone.now())
+    pub_date = models.DateTimeField('date published', default=timezone.now())
 
     def __str__(self):
-        return self.text, self.article_id, self.author_id
+        return self.text

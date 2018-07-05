@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
+
 {% block title %}
     <title>Index yeboy</title>
 {% endblock %}
 {% block content %}
-    <div>
-        <h1>List articles</h1>
-        <a href="{% url 'create_article' %}">CreateArticle</a>
-    </div>
+
+    {% if request.user.is_authenticated %}
+        <div>
+            <h1>List articles</h1>
+            <a href="{% url 'create_article' %}">CreateArticle</a>
+        </div>
+    {% endif %}
     <div>
         {% for article in articles %}
-            <li><a href={% url 'detail' article.id %}>{{ article.text }} {{ article.pub_date }}</a></li>
+            <li><a href={% url 'detail' article.id %}>{{ article.title }} {{ article.pub_date }}</a></li>
+            <a href="{% url 'delete_article' article.id %}" >
+                <button>X</button>
+            </a>
         {% endfor %}
     </div>
 

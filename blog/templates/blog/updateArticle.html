@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% csrf_token %}
+    <form action="{% url "update_article" article.pk %}" method="POST">
+        <div class="form-group ">
+            <table class="table">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if form.errors %}
+                            {#                                            {% for error in field.errors %}#}
+                            {#                                                <div class="alert alert-danger">#}
+                            {#                                                    <strong>{{ error|escape }}</strong>#}
+                            {#                                                </div>#}
+                            {#                                            {% endfor %}#}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {#                                                    <strong>{{ error|escape }}</strong>#}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">
+                                {{ field.help_text|safe }}  <!-- new code here -->
+                            </small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </table>
+            <input type="submit" class="btn btn-primary" value="Обновить статтю"/>
+        </div>
+    </form>
+{% endblock %}
