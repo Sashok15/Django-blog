@@ -1,10 +1,21 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, Http404
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
+from django.views import generic
+
 from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
+from .permissions import has_perm_or_is_author
+
+
+class ArticleListView(generic.ListView):
+    model = Article
+    queryset = Article.objects.all().order_by('-pub_date')
+    paginate_by = 10
+    context_object_name = 'articles'
+    template_name = 'blog/index.html'
 
 
 def index(request):
@@ -18,11 +29,10 @@ def index(request):
 def article_detail(request, pk):
     if request.method == "GET":
         article = get_object_or_404(Article, pk=pk)
-        comments = Comment.objects.filter(article_id=pk)
+        comments = Comment.objects.filter(article_id=pk).order_by("-pub_date")
         form = CommentForm(initial={'title': 'My Title', 'text': 'Loren Ipsun'})
         context = {'article_detail': article, 'comments': comments, 'form': form}
         return render(request, template_name="blog/articleDetail.html", context=context)
-    
     elif request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -52,9 +62,10 @@ def create_article(request):
             return HttpResponseRedirect('/')
 
 
+@permission_required('blog.custom_can_update_article')
 @login_required
 def update_article(request, pk):
-    if request.method == 'POST':
+    if request.method == 'PUT':
         form = ArticleForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
@@ -63,11 +74,24 @@ def update_article(request, pk):
             return HttpResponseRedirect('/')
     else:
         article = Article.objects.get(pk=pk)
+        # print(request.user) print login
+        print(request.user.id)
+        # print(article.author) print login
+        print(article.author_id)
+        print(article.author.id)
+        if request.user.id != article.author_id:
+            raise Http404
+        # can_update = has_perm_or_is_author(user_object=request.user, instance=article,
+        #                                    permission="blog.custom_can_update_article")
+        # if can_update:
+        #     raise Http404
+
         form = ArticleForm(initial={'title': article.title, 'text': article.text})
         return render(request, template_name='blog/updateArticle.html', context={'form': form,
                                                                                  'article': article})
 
 
+@login_required
 def delete_article(request, pk):
     if request.method == 'GET':
         Article.objects.filter(id=pk).delete()
@@ -76,9 +100,12 @@ def delete_article(request, pk):
         pass
 
 
-def update_comment(request):
+# only admin do it
+@login_required(redirect_field_name='/admin/')
+def edit_comment(request):
     pass
 
 
+@login_required(redirect_field_name='/admin/')
 def delete_comment(request):
     pass

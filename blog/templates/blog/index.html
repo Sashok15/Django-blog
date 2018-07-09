@@ -1,49 +1,62 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block title %}
+<title>Index yeboy</title>
+{% endblock %} {% block content %} {% if request.user.is_authenticated %}
+<div>
+    <h1>List articles</h1>
+    <a href="{% url 'create_article' %}">CreateArticle</a>
+</div>
+{% endif %}
+<div style="padding-left: 40px">
+    {% for article in articles %}
+    <li>
+        <a href={% url 'detail' article.id %}>{{ article.title }} {{ article.pub_date }}</a>
+    </li>
+    {% if request.user.is_superuser %}
+    <a href="{% url 'delete_article' article.id %}">
+        <button>X</button>
+    </a>
+    {% endif %} {% endfor %}
+</div>
+{# pagination for CBV #} {% if is_paginated %}
+<div class="pagination" style="text-align:center">
+    <span class="page-links">
+        {# page_obj instance of class Paginator #} {% if page_obj.has_previous %}
+        <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+        <span class="page-current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+        {% if page_obj.has_next %}
+        <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+{% endif %}
 
-{% block title %}
-    <title>Index yeboy</title>
-{% endblock %}
-{% block content %}
-
-    {% if request.user.is_authenticated %}
-        <div>
-            <h1>List articles</h1>
-            <a href="{% url 'create_article' %}">CreateArticle</a>
-        </div>
-    {% endif %}
-    <div>
-        {% for article in articles %}
-            <li><a href={% url 'detail' article.id %}>{{ article.title }} {{ article.pub_date }}</a></li>
-            <a href="{% url 'delete_article' article.id %}" >
-                <button>X</button>
-            </a>
-        {% endfor %}
-    </div>
-
-    <div>
-        <ul class="pagination justify-content-center" style="margin:20px 0">
-            {#    <div class="pagination" style="text-align: center">#}
-            {#    <span class="step-links">#}
-            <li class="page-item">
-                {% if articles.has_previous %}
-                    {#                    <a class="page-link" href="?page=1">&laquo; first</a>#}
+<div>
+    <ul class="pagination justify-content-center" style="margin:20px 0">
+        <div class="pagination" style="text-align: center">
+            <span class="step-links">
+                <li class="page-item">
+                    {% if articles.has_previous %} {#
+                    <a class="page-link" href="?page=1">&laquo; first</a>#}
                     <a class="page-link" href="?page={{ articles.previous_page_number }}">previous</a>
-                {% endif %}
-            </li>
+                    {% endif %}
+                </li>
 
-            <li class="page-item"><a class="page-link">
-                <span class="current">{{ articles }}
-{#                    {{ articles.paginator.num_pages }}.#}
-                </span>
-            </a>
-            </li>
+                <li class="page-item">
+                    <a class="page-link">
+                        <span class="current">{{ articles }} {# {{ articles.paginator.num_pages }}.#}
+                        </span>
+                    </a>
+                </li>
 
-            <li class="page-item">
-                {% if articles.has_next %}
+                <li class="page-item">
+                    {% if articles.has_next %}
                     <a class="page-link" href="?page={{ articles.next_page_number }}">next</a>
-                    {#                    <a class="page-link" href="?page={{ articles.paginator.num_pages }}">last &raquo;</a>#}
-                {% endif %}
-            </li>
-        </ul>
+                    <a class="page-link" href="?page={{ articles.paginator.num_pages }}">last &raquo;</a>#} {% endif %}
+                </li>
+    </ul>
     </div>
-{% endblock %}
+    {% endblock %}
+</div>
