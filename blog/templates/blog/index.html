@@ -12,13 +12,15 @@
         <a href={% url 'detail' article.id %}>{{ article.title }} {{ article.pub_date }}</a>
     </li>
     {% if request.user.is_superuser %}
-    <a href="{% url 'delete_article' article.id %}">
-        <button>X</button>
-    </a>
+    {% comment %} <a href="{% url 'delete_article' article.id %}"> {% endcomment %}
+            <form action="{% url 'delete_article' article.id %}" method="POST"> 
+                {% csrf_token %}
+            <input type="submit" name="field_delete" value="delete" />
+      </form>
     {% endif %} {% endfor %}
 </div>
 {# pagination for CBV #} {% if is_paginated %}
-<div class="pagination" style="text-align:center">
+<div class="pagination " style="justify-content: center;">
     <span class="page-links">
         {# page_obj instance of class Paginator #} {% if page_obj.has_previous %}
         <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
@@ -31,32 +33,4 @@
         {% endif %}
     </span>
 </div>
-{% endif %}
-
-<div>
-    <ul class="pagination justify-content-center" style="margin:20px 0">
-        <div class="pagination" style="text-align: center">
-            <span class="step-links">
-                <li class="page-item">
-                    {% if articles.has_previous %} {#
-                    <a class="page-link" href="?page=1">&laquo; first</a>#}
-                    <a class="page-link" href="?page={{ articles.previous_page_number }}">previous</a>
-                    {% endif %}
-                </li>
-
-                <li class="page-item">
-                    <a class="page-link">
-                        <span class="current">{{ articles }} {# {{ articles.paginator.num_pages }}.#}
-                        </span>
-                    </a>
-                </li>
-
-                <li class="page-item">
-                    {% if articles.has_next %}
-                    <a class="page-link" href="?page={{ articles.next_page_number }}">next</a>
-                    <a class="page-link" href="?page={{ articles.paginator.num_pages }}">last &raquo;</a>#} {% endif %}
-                </li>
-    </ul>
-    </div>
-    {% endblock %}
-</div>
+{% endif %} {% endblock %}{% include 'auth_app/includes/form.html' %}

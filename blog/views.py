@@ -17,21 +17,15 @@ class ArticleListView(generic.ListView):
     context_object_name = 'articles'
     template_name = 'blog/index.html'
 
-
-def index(request):
-    articles = Article.objects.all().order_by('-pub_date')
-    paginator = Paginator(articles, 10)
-    page = request.GET.get('page')
-    context = {'articles': paginator.get_page(page)}
-    return render(request, 'blog/index.html', context=context)
-
-
 def article_detail(request, pk):
     if request.method == "GET":
         article = get_object_or_404(Article, pk=pk)
         comments = Comment.objects.filter(article_id=pk).order_by("-pub_date")
         form = CommentForm(initial={'title': 'My Title', 'text': 'Loren Ipsun'})
-        context = {'article_detail': article, 'comments': comments, 'form': form}
+        is_owner = False
+        if request.user.id == article.author_id:
+            is_owner = True
+        context = {'article_detail': article, 'comments': comments, 'form': form, 'is_owner': is_owner}
         return render(request, template_name="blog/articleDetail.html", context=context)
     elif request.method == "POST":
         form = CommentForm(request.POST)
@@ -74,18 +68,8 @@ def update_article(request, pk):
             return HttpResponseRedirect('/')
     else:
         article = Article.objects.get(pk=pk)
-        # print(request.user) print login
-        print(request.user.id)
-        # print(article.author) print login
-        print(article.author_id)
-        print(article.author.id)
         if request.user.id != article.author_id:
             raise Http404
-        # can_update = has_perm_or_is_author(user_object=request.user, instance=article,
-        #                                    permission="blog.custom_can_update_article")
-        # if can_update:
-        #     raise Http404
-
         form = ArticleForm(initial={'title': article.title, 'text': article.text})
         return render(request, template_name='blog/updateArticle.html', context={'form': form,
                                                                                  'article': article})
@@ -93,11 +77,11 @@ def update_article(request, pk):
 
 @login_required
 def delete_article(request, pk):
-    if request.method == 'GET':
+    if request.method == 'POST':
         Article.objects.filter(id=pk).delete()
         return HttpResponseRedirect('/')
     else:
-        pass
+        return HttpResponseRedirect('/')
 
 
 # only admin do it

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% if request.user.is_authenticated and perms.blog.custom_can_update_article %}
+    {% if request.user.is_authenticated and is_owner or request.user.is_superuser %}
         <a href={% url 'update_article' article_detail.id %}>UpdateArticle</a>
     {% endif %}
     <div>
@@ -12,38 +12,11 @@
     </div>
     <div>
         <hr>
-        {% csrf_token %}
         {% if request.user.is_authenticated %}
             <form action="{% url 'detail' article_detail.id %}" method="POST">
-                <div class="form-group ">
-                    <table class="table">
-                        {% csrf_token %}
-                        {% for field in form %}
-                            <div class="form-group">
-                                {{ field.label_tag }}
-                                {{ field }}
-                                {% if form.errors %}
-                                    {#                                            {% for error in field.errors %}#}
-                                    {#                                                <div class="alert alert-danger">#}
-                                    {#                                                    <strong>{{ error|escape }}</strong>#}
-                                    {#                                                </div>#}
-                                    {#                                            {% endfor %}#}
-                                    {% for error in form.non_field_errors %}
-                                        <div class="alert alert-danger">
-                                            {#                                                    <strong>{{ error|escape }}</strong>#}
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
-                                {% if field.help_text %}
-                                    <small class="form-text text-muted">
-                                        {{ field.help_text|safe }}  <!-- new code here -->
-                                    </small>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </table>
+                    {%csrf_token%}
+                    {% include 'auth_app/includes/form.html' %}
                     <input type="submit" class="btn btn-primary" value="Додати коментарій"/>
-                </div>
             </form>
         {% endif %}
         <p>This is already comments </p>
