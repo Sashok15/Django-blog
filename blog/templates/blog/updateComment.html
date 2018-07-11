@@ -1,0 +1,11 @@
+{% extends "base.html" %} 
+
+{% block content %}
+
+<form action="{% url "update_comment" article.id comment.id %}" method="POST">
+    {% csrf_token %} 
+    {% include 'auth_app/includes/form.html' %}
+    <input type="submit" class="btn btn-primary" value="Обновить комент" />
+</form>
+
+{% endblock %}

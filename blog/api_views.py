@@ -20,7 +20,7 @@ class CreateUser(generics.CreateAPIView):
 
 class LoginView(APIView):
     permission_classes = ()
-    def post(self, request):
+    def post(self, request,):
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)

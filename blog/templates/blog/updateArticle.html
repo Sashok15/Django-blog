@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% csrf_token %}
     <form action="{% url "update_article" article.pk %}" method="POST">
             {% csrf_token %}
             {% include 'auth_app/includes/form.html' %}      

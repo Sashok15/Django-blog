@@ -1,33 +1,36 @@
-{% extends 'base.html' %}
-{% block content %}
-    {% if request.user.is_authenticated and is_owner or request.user.is_superuser %}
-        <a href={% url 'update_article' article_detail.id %}>UpdateArticle</a>
+{% extends 'base.html' %} {% block content %} 
+{% if request.user.is_authenticated and is_owner or request.user.is_superuser%}
+<a href={% url 'update_article' article_detail.id %}>UpdateArticle</a>
+{% endif %}
+<div>
+    <ul>
+        <li>{{ article_detail.id }}</li>
+        <li>{{ article_detail.title }}</li>
+        <li>{{ article_detail.text }}</li>
+    </ul>
+</div>
+<div>
+    <hr> {% if request.user.is_authenticated %}
+    <form action="{% url 'detail' article_detail.id %}" method="POST">
+        {%csrf_token%} {% include 'auth_app/includes/form.html' %}
+        <input type="submit" class="btn btn-primary" value="Додати коментарій" />
+    </form>
     {% endif %}
-    <div>
-        <ul>
-            <li>{{ article_detail.id }}</li>
-            <li>{{ article_detail.title }}</li>
-            <li>{{ article_detail.text }}</li>
-        </ul>
-    </div>
-    <div>
-        <hr>
-        {% if request.user.is_authenticated %}
-            <form action="{% url 'detail' article_detail.id %}" method="POST">
-                    {%csrf_token%}
-                    {% include 'auth_app/includes/form.html' %}
-                    <input type="submit" class="btn btn-primary" value="Додати коментарій"/>
-            </form>
-        {% endif %}
-        <p>This is already comments </p>
-        <ul>
-            {% for comment in comments %}
-                <ol>
-                    {{ comment.author.username }}
-                    {{ comment.text }}
-                    {{ comment.pub_date }}
-                </ol>
-            {% endfor %}
-        </ul>
-    </div>
+    <p>This is already comments </p>
+    <ul>
+        {% for comment in comments %}
+        <ol>
+            {{ comment.author.username }} {{ comment.text }} {{ comment.pub_date }}
+        </ol>
+            
+            <a href="{% url 'update_comment'  article_detail.id comment.id %}">
+                <input type="submit" class="btn btn-primary" value="update" />
+            </a>
+        <form action="{% url 'delete_comment'  article_detail.id comment.id %}" method="POST">
+            {%csrf_token%}
+            <input type="submit" class="btn btn-primary" value="X" />
+        </form>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
