@@ -2,7 +2,7 @@ import argparse
 import psycopg2 as sql
 
 parser = argparse.ArgumentParser(description="Укажите таблицу и количество строк")
-parser.add_argument('--namedb', "-nd", type=str)
+parser.add_argument('--name_table', "-nt", type=str)
 parser.add_argument('--quantity', "-q", type=int)
 options = parser.parse_args()
 conn = sql.connect(database='BlogTest', user='postgres',

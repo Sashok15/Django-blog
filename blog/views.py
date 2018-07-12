@@ -41,7 +41,7 @@ def article_detail(request, pk):
             initial={'title': 'My Title', 'text': 'Loren Ipsun text'})
         is_owner = has_perm_or_is_author(
             user_object=request.user, instance=article)
-        context = {'article_detail': article, 'comments': comments,
+        context = {'article': article, 'comments': comments,
                    'form': form, 'is_owner': is_owner}
         return render(request, template_name="blog/articleDetail.html", context=context)
     elif request.method == "POST":
@@ -128,7 +128,6 @@ def update_comment(request, article_pk, comment_pk):
 # @login_required(redirect_field_name='/admin/')
 @login_required
 def delete_comment(request, article_pk, comment_pk):
-    # path = '/article-detail/{0}'.format(article_pk)
     if request.method == 'POST':
         Comment.objects.filter(id=comment_pk).delete()
         return redirect('detail', pk=article_pk )

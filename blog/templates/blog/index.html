@@ -9,7 +9,7 @@
 <div style="padding-left: 40px">
     {% for article in articles %}
     <li>
-        <a href={% url 'detail' article.id %}>{{ article.title }} {{ article.pub_date }}</a>
+        <a href={% url 'detail' article.id %}>{{ article.title }} {{ article.pub_date | timesince }} ago</a>
     </li>
     {% if request.user.is_superuser %}
     {% comment %} <a href="{% url 'delete_article' article.id %}"> {% endcomment %}

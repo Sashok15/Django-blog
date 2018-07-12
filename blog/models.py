@@ -7,13 +7,15 @@ from django.utils import timezone
 # class User(AbstractUser):
 #     class Meta:
 #         permissions = (('can_update', 'To provide updeta own article'))
+        self.assertTemplateUsed(resp, 'posts.html')
 
 
 class Article(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     text = models.TextField()
-    pub_date = models.DateTimeField('date published', auto_now=True)
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
 
     class Meta:
         permissions = (
@@ -29,6 +31,7 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     pub_date = models.DateTimeField('date published', auto_now=True)
+    update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.text
