@@ -15,26 +15,7 @@ class URLTests(TestCase):
         self.register_user = {'username': 'testuser1', 'password': '12345'}
         self.user = User.objects.create_user(**self.register_user)
         self.article = Article.objects.create(
-            author=self.user,# class MySeleniumTests(StaticLiveServerTestCase):
-#     @classmethod
-#     def setUpClass(cls):
-#         super(MySeleniumTests, cls).setUpClass()
-#         cls.selenium = WebDriver()
-
-
-#     @classmethod
-#     def tearDownClass(cls):
-#         cls.selenium.quit()
-#         super(MySeleniumTests, cls).tearDownClass()
-
-
-#     def test_login(self):
-#         self.selenium.get('% s % s' % (self.live_server_url, '/login/'))
-#         username_input = self.selenium.find_element_by_name('username')
-#         username_input.send_keys('myuser')
-#         password_input = self.selenium.find_element_by_name('password')
-#         password_input.send_keys('secret')
-#         self.selenium.find_element_by_xpath('//input[@value=”Log in”]').click()
+            author=self.user,
             title='hey',
             text='text500'
         )
