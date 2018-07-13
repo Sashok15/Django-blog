@@ -7,7 +7,6 @@ from django.utils import timezone
 # class User(AbstractUser):
 #     class Meta:
 #         permissions = (('can_update', 'To provide updeta own article'))
-        self.assertTemplateUsed(resp, 'posts.html')
 
 
 class Article(models.Model):

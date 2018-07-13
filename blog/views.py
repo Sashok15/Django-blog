@@ -15,9 +15,6 @@ class ArticleListView(generic.ListView):
     paginate_by = 10
     context_object_name = 'articles'
     template_name = 'blog/index.html'
-    # method_list = [func for func in dir(Article) if callable(getattr(Article, func))]
-    # print(Article.__dict__)
-    # print(method_list)
 
 # class ArticleDetail(generic.DetailView):
 
@@ -70,7 +67,7 @@ def create_article(request):
             query = Article(title=title, text=text, author=user)
             query.save()
             messages.info(request, 'Ви створили статтю')
-            return redirect('/')
+            return redirect('index')
 
 
 @permission_required('blog.custom_can_update_article')
@@ -82,7 +79,7 @@ def update_article(request, pk):
             title = form.cleaned_data['title']
             text = form.cleaned_data['text']
             Article.objects.filter(id=pk).update(title=title, text=text)
-            return redirect('/')
+            return redirect('index')
     else:
         article = Article.objects.get(pk=pk)
         has_perm = has_perm_or_is_author(request.user, article)
@@ -99,7 +96,7 @@ def update_article(request, pk):
 def delete_article(request, pk):
     if request.method == 'POST':
         Article.objects.filter(id=pk).delete()
-        return redirect('/')
+        return redirect('index')
     else:
         raise Http404
 
