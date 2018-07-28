@@ -102,6 +102,10 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
 .idea/
 .local_settings.py
 .vscode/
+node_modules/
+media_collected/
+static_collected/

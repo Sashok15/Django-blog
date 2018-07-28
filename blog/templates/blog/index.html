@@ -1,23 +1,39 @@
-{% extends 'base.html' %} {% block title %}
+{% extends 'base.html' %} {% load static %} {% block title %}
+<script src="{% static " blog/index.js " %}"></script>
 <title>Index yeboy</title>
-{% endblock %} {% block content %} {% if request.user.is_authenticated %}
-<div>
-    <h1>List articles</h1>
-    <a href="{% url 'create_article' %}">CreateArticle</a>
-</div>
-{% endif %}
-<div style="padding-left: 40px">
-    {% for article in articles %}
-    <li>
-        <a href={% url 'detail' article.id %}>{{ article.title }} {{ article.pub_date | timesince }} ago</a>
-    </li>
-    {% if request.user.is_superuser %}
-    {% comment %} <a href="{% url 'delete_article' article.id %}"> {% endcomment %}
-            <form action="{% url 'delete_article' article.id %}" method="POST"> 
-                {% csrf_token %}
-            <input type="submit" name="field_delete" value="delete" />
-      </form>
-    {% endif %} {% endfor %}
+{% endblock %} {% block content %}
+
+<form method="GET" action="">
+    <input type="text" name="q" placeholder="Search article" id="">
+    <input type="submit" value="Search">
+</form>
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div>
+            {% if request.user.is_authenticated %}
+            <div>
+                <h1>List articles</h1>
+                <a href="{% url 'blog:create_article' %}">CreateArticle</a>
+            </div>
+            {% endif %} {% for article in articles %}
+            <div style="border:1px solid black;">
+                {% if article.image %}
+                <img src="{{ article.image.url }}" class="img-responsive" width="500px" height="300px" alt=""> {%endif%}
+                <p><a href="{{ article.get_absolute_url }}">{{ article.title }} </a></p>  
+                <p>{{ article.pub_date | timesince }} ago</p> 
+                <p>{{ article.text|truncatechars:20 }}</p>
+                {% if request.user.is_superuser %} {% comment %}
+                <a href="{% url 'delete_article' article.id %}"> {% endcomment %}
+                    <form action="{% url 'blog:delete_article' article.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" name="field_delete" value="delete" />
+                    </form>
+                    {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {# pagination for CBV #} {% if is_paginated %}
 <div class="pagination " style="justify-content: center;">
@@ -33,4 +49,4 @@
         {% endif %}
     </span>
 </div>
-{% endif %} {% endblock %}{% include 'auth_app/includes/form.html' %}
+{% endif %} {% endblock %} {% include 'auth_app/includes/form.html' %} {% block message %} {{block.super}} {% endblock %}

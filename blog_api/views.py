@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 
-from .models import Article, Comment
+from blog.models import Article, Comment
 from .serializers import ArticleSerializer, CommentSerializer, UserSerializer
 # from rest_framework import viewsets
 
@@ -30,6 +30,7 @@ class LoginView(APIView):
             return Response({'error': 'Wrong credential'}, status=status.HTTP_400_BAD_REQUEST)
 
 class ArticleList(generics.ListCreateAPIView):
+    permission_classes = ()
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 

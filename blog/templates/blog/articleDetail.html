@@ -1,17 +1,18 @@
 {% extends 'base.html' %} {% block content %} 
 {% if request.user.is_authenticated and is_owner or request.user.is_superuser%}
-<a href={% url 'update_article' article.id %}>UpdateArticle</a>
+<a href={% url 'blog:update_article' article.id %}>UpdateArticle</a>
 {% endif %}
 <div>
-    <ul>
-        <li>{{ article.id }}</li>
-        <li>{{ article.title }}</li>
-        <li>{{ article.text }}</li>
-    </ul>
+    {% if article.image %}
+    <img src="{{ article.image.url }}" class="img-responsive" width="500px" height="300px" alt="">
+    {%endif%}
+    <p> Title: {{ article.title }}</p>
+    <p> Content: {{ article.text }}</p>
+    
 </div>
 <div>
     <hr> {% if request.user.is_authenticated %}
-    <form action="{% url 'detail' article.id %}" method="POST">
+    <form action="{{ article.get_absolute_url }}" method="POST">
         {%csrf_token%} {% include 'auth_app/includes/form.html' %}
         <input type="submit" class="btn btn-primary" value="Додати коментарій" />
     </form>
@@ -23,15 +24,14 @@
             {{ comment.author.username }} {{ comment.text }} {{ comment.pub_date }}
         </ol>
         {% if request.user.is_authenticated and is_owner or request.user.is_superuser%}
-            <a href="{% url 'update_comment'  article.id comment.id %}">
-                <input type="submit" class="btn btn-primary" value="update" />
-            </a>
-        <form action="{% url 'delete_comment'  article.id comment.id %}" method="POST">
+        <a href="{% url 'blog:update_comment'  article.id comment.id %}">
+            <input type="submit" class="btn btn-primary" value="update" />
+        </a>
+        <form action="{% url 'blog:delete_comment'  article.id comment.id %}" method="POST">
             {%csrf_token%}
             <input type="submit" class="btn btn-primary" value="X" />
         </form>
-        {% endif %}
-        {% endfor %}
+        {% endif %} {% endfor %}
     </ul>
 </div>
 {% endblock %}

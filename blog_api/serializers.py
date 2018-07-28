@@ -3,7 +3,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
-from .models import Article, Comment
+from blog.models import Article, Comment
 
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:

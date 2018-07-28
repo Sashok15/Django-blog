@@ -2,7 +2,7 @@
 
 {% block content %}
     {% csrf_token %}
-    <form action="{% url "create_article" %}" method="POST">
+    <form action="{% url 'blog:create_article' %}" method="POST" enctype="multipart/form-data">
         <div class="form-group ">
             {% csrf_token %}
             {% include "auth_app/includes/form.html" %}

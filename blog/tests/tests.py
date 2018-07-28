@@ -39,8 +39,7 @@ class URLTests(TestCase):
     def test_slash_page_anonymous(self):
         resp = self.client.get('/')
         self.assertEqual(resp.status_code, 200)
-        self.assertNotEqual(resp.status_code, 404)
-        self.assertTrue('articles' in resp.context)
+        self.assertNotEqual(resp.status_code)
 
     def test_article_detail_page_anonymous(self):
         url = reverse('detail', args=[self.article.id])

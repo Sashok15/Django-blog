@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form action="{% url "update_article" article.pk %}" method="POST">
+    <form action="{% url 'blog:update_article' article.pk %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {% include 'auth_app/includes/form.html' %}      
             <input type="submit" class="btn btn-primary" value="Обновить статтю"/>

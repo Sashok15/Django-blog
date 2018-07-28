@@ -5,7 +5,7 @@ from .models import Article, Comment
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'text']
+        fields = ['title', 'image', 'text']
 
     # def __init__(self, *args, **kwargs):
     #     self.user = kwargs.pop('author') 
