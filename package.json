@@ -1,0 +1,34 @@
+{
+  "name": "BlogTest",
+  "version": "1.0.0",
+  "description": "Articles for each",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development ./frontend/src/index.js --output ./frontend/static/frontend/main.js",
+    "build": "webpack --mode production ./frontend/src/index.js --output ./frontend/static/frontend/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sashok15/Django-blog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sashok15/Django-blog/issues"
+  },
+  "homepage": "https://github.com/Sashok15/Django-blog#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "weak-key": "^1.0.0",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.0.8"
+  }
+}
